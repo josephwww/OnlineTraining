@@ -17,10 +17,10 @@ def home():
     return render_template('home.html')
 
 
-@app.route('/about')
+@app.route('/class')
 @login_required
-def about():
-    return render_template('about.html', title='About')
+def classs():
+    return render_template('class.html', title='Class')
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -29,7 +29,7 @@ def login():
         return redirect(url_for('home'))
     form = LoginForm()
     if form.validate_on_submit():
-        user = User.query.filter_by(email=form.email.data).first()
+        user = User.query.filter_by(username=form.username.data).first()
         if user:
             if bcrypt.check_password_hash(user.password, form.password.data):
                 login_user(user, remember=form.remember.data)
@@ -40,7 +40,7 @@ def login():
                     return redirect(url_for('home'))
             else:
                 flash('Login Unsuccessful. Please check your password', 'danger')
-        flash('Login Unsuccessful. Email does not exist', 'danger')
+        flash('Login Unsuccessful. Username does not exist', 'danger')
     return render_template('login.html', title='Login', form=form)
 
 
