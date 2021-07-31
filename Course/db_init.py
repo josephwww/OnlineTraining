@@ -14,7 +14,8 @@ db.create_all()
 # create an admin account
 hashed_password = bcrypt.generate_password_hash('test').decode('utf8')
 roles = {'admin': 'admin', 'student': 'student'}
-test_user = User(username='test', password=hashed_password, company='example_company', role='admin')
-
-db.session.add(test_user)
+test_admin = User(username='test', password=hashed_password, company='example_company', role='admin')
+test_student = User(username='student', password=hashed_password, company='example_company', role='student')
+db.session.add(test_admin)
+db.session.add(test_student)
 db.session.commit()
