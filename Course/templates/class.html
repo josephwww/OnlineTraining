@@ -1,9 +1,7 @@
 {% extends "layout.html" %}
 {% block content %}
-    {{ current_user.company}}
-    {{ current_user.classes}}
 
-    {% if current_user.classes.count == 0 %}
+    {% if current_user.classes|length == 0 %}
         <article class="media content-section">
           <div class="media-body">
             <div class="article-metadata">
