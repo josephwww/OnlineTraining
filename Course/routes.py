@@ -75,14 +75,14 @@ def favicon():
 #     return redirect(url_for('result'))
 
 
-@app.route("/class/<int:rating_id>", methods=['GET'])
+@app.route("/class/<int:class_id>", methods=['GET'])
 @login_required
 def get_class(class_id):
     c = Class.query.get_or_404(class_id)
-    if current_user not in c.students || current_user.role != 'admin':
+    if current_user not in c.students or current_user.role != 'admin':
         abort(403)
 
-    return redirect(url_for('class_content'))
+    return render_template('admin.html', title='admin')
 
 
 @app.route("/admin", methods=['GET', 'POST'])

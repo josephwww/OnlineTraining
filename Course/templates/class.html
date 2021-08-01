@@ -3,7 +3,7 @@
     {{ current_user.company}}
     {{ current_user.classes}}
 
-    {% if current_user.classes.count() == 0 %}
+    {% if current_user.classes.count == 0 %}
         <article class="media content-section">
           <div class="media-body">
             <div class="article-metadata">
@@ -19,19 +19,20 @@
             <div class="article-metadata">
               <a class="mr-2" href="#">{{ class.description }}</a>
               <span class="badge badge-info">{{ class.introduction }}</span>
-                <form class="float-right" action="{{ url_for('delete_rating', rating_id=rating.id) }}" method="POST">
-                    <button type="submit" class="btn btn-danger btn-sm float-right" >Delete</button>
+                <form class="float-right" action="{{ url_for('get_class', class_id=class.id) }}" method="GET">
+                    <button type="submit" class="btn btn-info btn-sm float-right" >Study</button>
                 </form>
             </div>
-            {% if rating.score == 5 %}
-            <h2><a class="article-title" href="#">Liked</a></h2>
-              {% elif rating.score == 1 %}
-            <h2><a class="article-title" href="#">Unliked</a></h2>
-              {% elif rating.score == 3 %}
-            <h2><a class="article-title" href="#">Moderate</a></h2>
-              {% elif rating.score == 0 %}
-            <h2><a class="article-title" href="#">Unknown</a></h2>
-              {% endif %}
+            <h2><a class="article-title" href="#">Content</a></h2>
+              <p>{{ class.content }}</p>
+            <h2>Outcome</h2>
+              <p>{{ class.outcome }}</p>
+            <h2>Lecturer</h2>
+              <p>{{ class.lecturer }}</p>
+            <h2>Share</h2>
+              <p>{{ class.share }}</p>
+            <h2>Recipe</h2>
+              <p>{{ class.recipe }}</p>
           </div>
         </article>
     {% endfor %}
