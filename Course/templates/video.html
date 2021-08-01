@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+{% block content %}
+    <div class="jumbotron">
+                        <h4>Course description: {{ c.description }}</h4>
+
+            <h5>Course introduction: {{ c.introduction }}</h5>
+
+        <p></p>
+        <hr class="my-4">        <h4>Lecture Video</h4>
+
+<iframe width="800" height="400"
+src="https://www.youtube.com/embed/tgbNymZ7vqY">
+</iframe>        <p class="lead">
+        <a class="btn btn-primary btn-lg" href="{{ url_for('classs') }}" role="button">Test</a>
+        </p>
+    </div>
+{% endblock content %}
