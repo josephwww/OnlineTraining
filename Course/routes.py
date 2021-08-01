@@ -79,10 +79,8 @@ def favicon():
 @login_required
 def get_class(class_id):
     c = Class.query.get_or_404(class_id)
-    if current_user not in c.students or current_user.role != 'admin':
-        abort(403)
 
-    return render_template('admin.html', title='admin')
+    return render_template('video.html', title='admin',c=c)
 
 
 @app.route("/admin", methods=['GET', 'POST'])
