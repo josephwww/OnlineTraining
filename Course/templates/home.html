@@ -1,12 +1,61 @@
 {% extends "layout.html" %}
 {% block content %}
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="#">Category</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown1" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Mental
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown1">
+          <a class="dropdown-item" href="{{ url_for('intro', class_id=c[0].id) }}">{{ c[0].description }}</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="{{ url_for('intro', class_id=c[1].id) }}">{{ c[1].description }}</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="{{ url_for('intro', class_id=c[2].id) }}">{{ c[2].description }}</a>
+        </div>
+      </li>
+
+        <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Physical
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown2">
+          <a class="dropdown-item" href="{{ url_for('intro', class_id=c[3].id) }}">{{ c[3].description }}</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="{{ url_for('intro', class_id=c[4].id) }}">{{ c[4].description }}n</a>
+
+        </div>
+      </li>
+
+        <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown3" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Verbal
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown3">
+          <a class="dropdown-item" href="{{ url_for('intro', class_id=c[5].id) }}">{{ c[5].description }}</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="{{ url_for('intro', class_id=c[6].id) }}">{{ c[6].description }}</a>
+            <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="{{ url_for('intro', class_id=c[7].id) }}">{{ c[7].description }}</a>
+
+        </div>
+      </li>
+    </ul>
+  </div>
+</nav>
     <div class="jumbotron">
         <h1 class="display-4">{{ current_user.company }}</h1>
-        <p class="lead">Example</p>
-        <hr class="my-4">
-        <p>Example</p>
+        <p class="lead">Welcome to {{ current_user.company }} Online Training System</p>
+
         <p class="lead">
-        <a class="btn btn-primary btn-lg" href="{{ url_for('classs') }}" role="button">Learn more</a>
+        <a class="btn btn-primary btn-lg" href="{{ url_for('classs') }}" role="button">My Class List</a>
         </p>
     </div>
 {% endblock content %}

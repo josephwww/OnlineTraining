@@ -8,16 +8,24 @@ from flask_login import UserMixin
 def load_user(user_id):
     return User.query.get(int(user_id))
 
-question_test_association_table = db.Table('question_test',
-    db.Column('question_id', db.Integer, db.ForeignKey('question.id'), primary_key=True),
-    db.Column('test_id', db.Integer, db.ForeignKey('test.id'), primary_key=True)
-)
+# question_test_association_table = db.Table('question_test',
+#     db.Column('question_id', db.Integer, db.ForeignKey('question.id'), primary_key=True),
+#     db.Column('test_id', db.Integer, db.ForeignKey('test.id'), primary_key=True)
+# )
 
-user_class_association_table = db.Table('user_class',
-    db.Column('user_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
-    db.Column('class_id', db.Integer, db.ForeignKey('class.id'), primary_key=True)
-)
+# user_class_association_table = db.Table('user_class',
+#     db.Column('user_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
+#     db.Column('class_id', db.Integer, db.ForeignKey('class.id'), primary_key=True),
+#     db.Column('mark', db.Integer),
+#     db.relationship('User', backref='user_class')
+# )
 
+class UserClas(db.Model):
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
+    clas_id = db.Column(db.Integer, db.ForeignKey('clas.id'), primary_key=True)
+    mark = db.Column(db.Integer)
+    clas = db.relationship('Clas', back_populates='users')
+    user = db.relationship('User', back_populates='clases')
 
 class User(db.Model, UserMixin):
 
@@ -26,11 +34,11 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(60), nullable=False)
     company = db.Column(db.String(60), nullable=True)
     role = db.Column(db.String(10), nullable=False)
-    classes = db.relationship('Class', secondary=user_class_association_table, lazy='subquery', backref=db.backref('stus', lazy=True))
-    tests = db.relationship('Test', backref='tester', lazy='dynamic')
+
+    clases = db.relationship('UserClas', back_populates='user')
 
     def __repr__(self):
-        return f"User('{self.username}', '{self.company}')"
+        return f"User('{self.username}', Company: '{self.company}', Role: {self.role})"
 
 
 class Question(db.Model):
@@ -39,28 +47,15 @@ class Question(db.Model):
     year = db.Column(db.Integer, nullable=False)
     semester = db.Column(db.Integer, nullable=False)
     question_text = db.Column(db.String(200), nullable=False)
-    class_id = db.Column(db.Integer, db.ForeignKey('class.id'), nullable=False)
+    clas_id = db.Column(db.Integer, db.ForeignKey('clas.id'))
 
-    tests = db.relationship('Test', secondary=question_test_association_table, lazy='subquery', backref=db.backref('qs', lazy=True))
-
-    def __repr__(self):
-        return f"Question('{self.question}' in year {self.year} semester {self.semester})"
-
-
-class Test(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    student_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    class_id = db.Column(db.Integer, db.ForeignKey('class.id'), nullable=False)
-    mark = db.Column(db.Integer, nullable=True)
-    time_limit = db.Column(db.Integer, nullable=False)
-
-    questions = db.relationship('Question', secondary=question_test_association_table, lazy='subquery', backref=db.backref('ts', lazy=True))
+    # tests = db.relationship('Test', secondary=question_test_association_table, lazy='subquery', backref=db.backref('qs', lazy=True))
 
     def __repr__(self):
-        return f"Test('{self.tester} ,mark{self.mark}, time_limit{self.time_limit})"
+        return f"Question('{self.question_type}' in year {self.year} semester {self.semester})"
 
 
-class Class(db.Model):
+class Clas(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     description = db.Column(db.String(200), nullable=True)
     introduction = db.Column(db.String(200), nullable=True)
@@ -69,10 +64,13 @@ class Class(db.Model):
     lecturer = db.Column(db.String(200), nullable=True)
     share = db.Column(db.String(200), nullable=True)
     recipe = db.Column(db.String(200), nullable=True)
+    video_link = db.Column(db.String(500), nullable=False)
+    limit_time = db.Column(db.Integer, nullable=False)
 
-    questions = db.relationship('Question', backref='questions', lazy='dynamic')
-    students = db.relationship('User', secondary=user_class_association_table, lazy='subquery', backref=db.backref('courses', lazy=True))
+    questions = db.relationship('Question', backref='course', lazy='dynamic')
+    # students = db.relationship('User', secondary=user_class_association_table, lazy='subquery', backref=db.backref('courses', lazy=True))
+    users = db.relationship('UserClas', back_populates='clas')
 
     def __repr__(self):
-        return f"Class {self.description}"
+        return f"Clas {self.description}"
 

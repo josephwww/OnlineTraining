@@ -1,10 +1,89 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "layout.html" %}
+{% block content %}
+{% set cnt=[1] %}
 
-</body>
-</html>
+
+
+{% for question in q %}
+
+{% if question.question_type=='YN' %}
+<div class="container-sm">
+<h5>Question {{ cnt[0] }}</h5>
+<h5>{{question.question_text}}  </h5>
+  <label class="my-1 mr-2" for="inlineFormCustomSelectPref">Selection:</label>
+  <select class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
+    <option selected>Yes/No</option>
+    <option value="1">Yes</option>
+    <option value="2">No</option>
+
+  </select>
+</div>
+<br>
+
+
+{% elif question.question_type=='MC' %}
+
+<div class="container-sm">
+<h5>Question {{ cnt[0] }}</h5>
+<h5>{{question.question_text}}  </h5>
+
+  <label class="my-1 mr-2"  >Selection:</label>
+  <select class="custom-select" >
+    <option selected>Choose...</option>
+    <option value="1">A</option>
+    <option value="2">B</option>
+    <option value="3">C</option>
+    <option value="4">D</option>
+  </select>
+</div>
+<br>
+
+
+    {% elif question.question_type=='ET' or question.question_type=='C' %}
+<div class="container-sm">
+<h5>Question {{ cnt[0] }}</h5>
+<h5>{{question.question_text}}  </h5>
+
+  <div class="form-group">
+    <label for="exampleFormControlTextarea1">Type your essay here</label>
+    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+  </div>
+
+</div>
+<br>
+{% endif %}
+{% if cnt.append(cnt.pop() +1) %}{% endif %}
+
+{% endfor %}
+  {% if type=='mock' %}
+<a href="{{ url_for('get_class',class_id=class_id )}}" class="text-center btn btn-primary btn-lg" role="button" aria-disabled="true">Submit test</a>
+  {% else %}
+  <a href="{{ url_for('finish_course',course_id=class_id, student_id=current_user.id )}}" class="text-center btn btn-primary btn-lg" role="button" aria-disabled="true">Submit test</a>
+  {% endif %}
+<span class="text-danger text-center" id="time"> </span>
+<br><br>
+<script>
+function startTimer(duration, display) {
+    var timer = duration, minutes, seconds;
+    setInterval(function () {
+        minutes = parseInt(timer / 60, 10);
+        seconds = parseInt(timer % 60, 10);
+
+        minutes = minutes < 10 ? "0" + minutes : minutes;
+        seconds = seconds < 10 ? "0" + seconds : seconds;
+
+        display.textContent = "Time Limit: " +minutes + ":" + seconds;
+
+        if (--timer < 0) {
+            timer = duration;
+        }
+    }, 1000);
+}
+
+window.onload = function () {
+    var fiveMinutes = 60 * {{ time }},
+        display = document.querySelector('#time');
+    startTimer(fiveMinutes, display);
+};
+</script>
+{% endblock content %}

@@ -1,10 +1,40 @@
 {% extends "layout.html" %}
 {% block content %}
-    <div class="content-section">
+
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th scope="col">User Name</th>
+      <th scope="col">Course Count</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for user in users %}
+      <tr>
+          <th scope="row">{{ user.username}}</th>
+          <td data-toggle="tooltip" title="{% for record in user.clases %}{{ record.clas.description }} & {% endfor %}">{{ user.clases|length }}</td>
+  {% endfor %}
+    </tr>
+    <tr>
+      <td colspan="2"><a class="btn btn-success" data-toggle="modal" data-target="#exampleModal" href="#" role="button">Add Acount</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Add User</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
         <form method="POST" action="">
             {{ form.hidden_tag() }}
             <fieldset class="form-group">
-                <legend class="border-bottom mb-4">Add Company</legend>
                 <div class="form-group">
                     {{ form.username.label(class="form-control-label ") }}
                     {% if form.username.errors %}
@@ -50,5 +80,9 @@
                 {{ form.submit(class="btn btn-outline-info") }}
             </div>
         </form>
+      </div>
     </div>
+  </div>
+</div>
+
 {% endblock content %}

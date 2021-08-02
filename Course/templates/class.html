@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 {% block content %}
 
-    {% if current_user.classes|length == 0 %}
+    {% if classes|length == 0 %}
         <article class="media content-section">
           <div class="media-body">
             <div class="article-metadata">
@@ -11,26 +11,23 @@
           </div>
         </article>
     {% else %}
-        {% for class in current_user.classes %}
+        {% for class in classes %}
         <article class="media content-section">
           <div class="media-body">
             <div class="article-metadata">
-              <a class="mr-2" href="#">{{ class.description }}</a>
-              <span class="badge badge-info">{{ class.introduction }}</span>
-                <form class="float-right" action="{{ url_for('get_class', class_id=class.id) }}" method="GET">
+              <a class="mr-2" href="{{ url_for('intro', class_id=class.clas.id) }}">{{ class.clas.description }}</a>
+                {% if class.mark==0 %}}
+                <form class="float-right" action="{{ url_for('get_class', class_id=class.clas.id) }}" method="GET">
                     <button type="submit" class="btn btn-info btn-sm float-right" >Study</button>
                 </form>
+                {% else %}
+                <form class="float-right " action="#" method="GET">
+                    <button type="submit" class="btn btn-danger btn-sm float-right disabled" >Finished</button>
+                </form>
+                {% endif %}
             </div>
-            <h2><a class="article-title" href="#">Content</a></h2>
-              <p>{{ class.content }}</p>
-            <h2>Outcome</h2>
-              <p>{{ class.outcome }}</p>
-            <h2>Lecturer</h2>
-              <p>{{ class.lecturer }}</p>
-            <h2>Share</h2>
-              <p>{{ class.share }}</p>
-            <h2>Recipe</h2>
-              <p>{{ class.recipe }}</p>
+            <h2>Mark</h2>
+              <h3 class="text-success">{{ class.mark }}</h3>
           </div>
         </article>
     {% endfor %}

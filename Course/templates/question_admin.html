@@ -1,0 +1,170 @@
+{% extends "layout.html" %}
+{% block content %}
+
+{% set type_dict = {'YN': 'Yes/No', 'MC': 'Multiple Choice', 'ET': 'Essay Type', "C": "Comprehensive"} %}
+
+<table class="table table-hover">
+  <thead>
+    <tr>
+
+      <th scope="col">
+          <div class="dropdown">
+            <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Year
+            </button>
+          <div class="dropdown-menu">
+              <a class="dropdown-item" href="{{ url_for('question_admin', year=-1, semester=dsemester, class_id=dclas_id) }}">All</a>
+              {% for year in Q.query.with_entities(Q.year).distinct().all() %}
+            <a class="dropdown-item" href="{{ url_for('question_admin', year=year[0], semester=dsemester, class_id=dclas_id) }}">{{ year[0] }}</a>
+              {% endfor%}
+          </div>
+          </div>
+      </th>
+
+      <th scope="col">
+
+          <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Semester
+            </button>
+          <div class="dropdown-menu">
+              <a class="dropdown-item" href="{{ url_for('question_admin', year=dyear, semester=-1, class_id=dclas_id) }}">All</a>
+              {% for semester in Q.query.with_entities(Q.semester).distinct().all() %}
+            <a class="dropdown-item" href="{{ url_for('question_admin', year=dyear, semester=semester[0], class_id=dclas_id) }}">{{ semester[0] }}</a>
+              {% endfor%}
+          </div>
+          </div>
+      </th>
+        <th scope="col">
+          <div class="dropdown">
+          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Course Description
+          </button>
+          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+
+<!--          <button type="button" class="btn btn-secondary dropdown-toggle" id="dropdownCourseButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">-->
+<!--                Course Description-->
+<!--            </button>-->
+<!--          <div class="dropdown-menu" aria-labelledby="dropdownCourseButton">-->
+              <a class="dropdown-item" href="{{ url_for('question_admin', year=dyear, semester=dsemester, class_id=-1) }}">All</a>
+              {% for course_id in Q.query.with_entities(Q.clas_id).distinct().all() %}
+
+            <a class="dropdown-item" href="{{ url_for('question_admin', year=dyear, semester=dsemester, class_id=course_id[0]) }}">{{ Q.query.filter_by(clas_id=course_id[0]).first().course.description }}</a>
+              {% endfor%}
+          </div>
+          </div>
+      </div>
+        </th>
+      <th scope="col">Question Type</th>
+      <th scope="col">Question Text</th>
+
+    </tr>
+  </thead>
+  <tbody>
+  <tr>
+      <td colspan="5" class="text-center"><a class="btn btn-success" data-toggle="modal" data-target="#exampleModal" href="#" role="button">Add Question</a></td>
+    </tr>
+  {% for question in questions %}
+      <tr>
+          <th scope="row">{{ question.year}}</th>
+          <td scope="row">{{ question.semester }}</td>
+          <td scope="row">{{ question.course.description }}</td>
+
+          <td scope="row">{{ type_dict[question.question_type] }}</td>
+          <td scope="row">{{ question.question_text }}</td>
+  {% endfor %}
+    </tr>
+
+  </tbody>
+</table>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="form">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Add Question</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form method="POST" action="">
+            {{ form.hidden_tag() }}
+            <fieldset class="form-group">
+                <div class="form-group">
+                    {% if form.question_type.errors %}
+                        {{ form.question_type.label(class="form-control-label") }}
+                        {{ form.question_type(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            <span>You have to choose the type</span>
+                        </div>
+                    {% else %}
+                        {{ form.question_type.label(class="form-control-label") }}
+                        {{ form.question_type(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    {{ form.question_text.label(class="form-control-label ") }}
+                    {% if form.question_text.errors %}
+                        {{ form.question_text(class="form-control form-control-lg is-invalid autofocus") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.question_text.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.question_text(class="form-control form-control-lg autofocus") }}
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    {{ form.year.label(class="form-control-label") }}
+                    {% if form.year.errors %}
+                        {{ form.year(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.year.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.year(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    {% if form.semester.errors %}
+                        {{ form.semester.label(class="form-control-label") }}
+                        {{ form.semester(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            <span>You have to choose the semester</span>
+                        </div>
+                    {% else %}
+                        {{ form.semester.label(class="form-control-label") }}
+                        {{ form.semester(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    {% if form.course.errors %}
+                        {{ form.course.label(class="form-control-label") }}
+                        {{ form.course(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            <span>You have to choose the course</span>
+                        </div>
+                    {% else %}
+                        {{ form.course.label(class="form-control-label") }}
+                        {{ form.course(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+            </fieldset>
+            <div class="form-group">
+                {{ form.submit(class="btn btn-outline-info") }}
+            </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}

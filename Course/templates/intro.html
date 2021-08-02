@@ -1,0 +1,88 @@
+{% extends "layout.html" %}
+{% block content %}
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="#">Category</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown1" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Mental
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown1">
+          <a class="dropdown-item" href="{{ url_for('intro', class_id=courses[0].id) }}">{{ courses[0].description }}</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="{{ url_for('intro', class_id=courses[1].id) }}">{{ courses[1].description }}</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="{{ url_for('intro', class_id=courses[2].id) }}">{{ courses[2].description }}</a>
+        </div>
+      </li>
+
+        <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Physical
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown2">
+          <a class="dropdown-item" href="{{ url_for('intro', class_id=courses[3].id) }}">{{ courses[3].description }}</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="{{ url_for('intro', class_id=courses[4].id) }}">{{ courses[4].description }}n</a>
+
+        </div>
+      </li>
+
+        <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown3" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Verbal
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown3">
+          <a class="dropdown-item" href="{{ url_for('intro', class_id=courses[5].id) }}">{{ courses[5].description }}</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="{{ url_for('intro', class_id=courses[6].id) }}">{{ courses[6].description }}</a>
+            <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="{{ url_for('intro', class_id=courses[7].id) }}">{{ courses[7].description }}</a>
+
+        </div>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+                <div class="row ">
+                        <div class="jumbotron col-md-12">
+                            <div class="container ">
+                            <h1 class="display-4">Description: {{ c.description }}</h1>
+                            <p class="lead">Introduction: {{ c.introduction}}</p>
+                            <hr class="my-4">
+
+                        <h2>Content</h2>
+                          <p>{{ c.content }}</p>
+                        <h2>Expected Learning Outcomes</h2>
+                          <p>{{ c.outcome }}</p>
+                        <h2>Lecturer Introduction</h2>
+                          <p>{{ c.lecturer }}</p>
+                        <h2>Sharing</h2>
+                          <p>{{ c.share }}</p>
+                        <h2>Recipe</h2>
+                          <p>{{ c.recipe }}</p>
+
+                            <p class="lead">
+                                {% if enrolled %}
+                                    {% if mark != 0 %}
+                                        <a class="btn btn-Seconary btn-lg" href="#" role="button">Mark: {{ mark }}</a>
+                                    {% else %}
+                                        <a class="btn btn-primary btn-lg" href="{{ url_for('get_class', class_id=c.id) }}" role="button">Study</a>
+                                    {% endif %}
+                                {% else %}
+                                    <a class="btn btn-success btn-lg" href="{{ url_for('get_class', class_id=c.id) }}" role="button">Enroll</a>
+                                {% endif %}
+                            </p>
+                        </div>
+                        </div>
+                </div>
+
+
+
+{% endblock content %}
