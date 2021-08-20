@@ -14,11 +14,15 @@
           Mental
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown1">
-          <a class="dropdown-item" href="{{ url_for('intro', class_id=c[0].id) }}">{{ c[0].description }}</a>
-          <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="{{ url_for('intro', class_id=c[1].id) }}">{{ c[1].description }}</a>
-          <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="{{ url_for('intro', class_id=c[2].id) }}">{{ c[2].description }}</a>
+          {% if c[0]|length == 0 %}
+            <a class="dropdown-item" href="#">N/A</a>
+            {% else %}
+              {% for course in c[0] %}
+                <a class="dropdown-item" href="{{ url_for('intro', class_id=course.id) }}">{{ course.description }}</a>
+                <div class="dropdown-divider"></div>
+              {% endfor %}
+            {% endif %}
+
         </div>
       </li>
 
@@ -27,10 +31,14 @@
           Physical
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown2">
-          <a class="dropdown-item" href="{{ url_for('intro', class_id=c[3].id) }}">{{ c[3].description }}</a>
-          <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="{{ url_for('intro', class_id=c[4].id) }}">{{ c[4].description }}n</a>
-
+          {% if c[1]|length == 0 %}
+            <a class="dropdown-item" href="#">N/A</a>
+            {% else %}
+              {% for course in c[1] %}
+                <a class="dropdown-item" href="{{ url_for('intro', class_id=course.id) }}">{{ course.description }}</a>
+                <div class="dropdown-divider"></div>
+              {% endfor %}
+            {% endif %}
         </div>
       </li>
 
@@ -39,20 +47,22 @@
           Verbal
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown3">
-          <a class="dropdown-item" href="{{ url_for('intro', class_id=c[5].id) }}">{{ c[5].description }}</a>
-          <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="{{ url_for('intro', class_id=c[6].id) }}">{{ c[6].description }}</a>
-            <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="{{ url_for('intro', class_id=c[7].id) }}">{{ c[7].description }}</a>
-
+                      {% if c[2]|length == 0 %}
+            <a class="dropdown-item" href="#">N/A</a>
+            {% else %}
+              {% for course in c[2] %}
+                <a class="dropdown-item" href="{{ url_for('intro', class_id=course.id) }}">{{ course.description }}</a>
+                <div class="dropdown-divider"></div>
+              {% endfor %}
+            {% endif %}
         </div>
       </li>
     </ul>
   </div>
 </nav>
     <div class="jumbotron">
-        <h1 class="display-4">{{ current_user.company }}</h1>
-        <p class="lead">Welcome to {{ current_user.company }} Online Training System</p>
+        <h1 class="display-4">{{ current_user.owner.name }}</h1>
+        <p class="lead">Welcome to {{ current_user.owner.name }} Online Training System</p>
 
         <p class="lead">
         <a class="btn btn-primary btn-lg" href="{{ url_for('classs') }}" role="button">My Class List</a>

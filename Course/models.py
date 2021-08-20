@@ -8,17 +8,13 @@ from flask_login import UserMixin
 def load_user(user_id):
     return User.query.get(int(user_id))
 
-# question_test_association_table = db.Table('question_test',
-#     db.Column('question_id', db.Integer, db.ForeignKey('question.id'), primary_key=True),
-#     db.Column('test_id', db.Integer, db.ForeignKey('test.id'), primary_key=True)
-# )
 
-# user_class_association_table = db.Table('user_class',
-#     db.Column('user_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
-#     db.Column('class_id', db.Integer, db.ForeignKey('class.id'), primary_key=True),
-#     db.Column('mark', db.Integer),
-#     db.relationship('User', backref='user_class')
-# )
+class Company(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(200), nullable=False)
+    users = db.relationship('User', backref='owner', lazy='dynamic')
+    clases = db.relationship('Clas', backref='company', lazy='dynamic')
+
 
 class UserClas(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
@@ -27,12 +23,12 @@ class UserClas(db.Model):
     clas = db.relationship('Clas', back_populates='users')
     user = db.relationship('User', back_populates='clases')
 
-class User(db.Model, UserMixin):
 
+class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(20), unique=True, nullable=False)
     password = db.Column(db.String(60), nullable=False)
-    company = db.Column(db.String(60), nullable=True)
+    company_id = db.Column(db.Integer, db.ForeignKey('company.id'))
     role = db.Column(db.String(10), nullable=False)
 
     clases = db.relationship('UserClas', back_populates='user')
@@ -49,7 +45,6 @@ class Question(db.Model):
     question_text = db.Column(db.String(200), nullable=False)
     clas_id = db.Column(db.Integer, db.ForeignKey('clas.id'))
 
-    # tests = db.relationship('Test', secondary=question_test_association_table, lazy='subquery', backref=db.backref('qs', lazy=True))
 
     def __repr__(self):
         return f"Question('{self.question_type}' in year {self.year} semester {self.semester})"
@@ -57,6 +52,7 @@ class Question(db.Model):
 
 class Clas(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    category = db.Column(db.String(10), nullable=False)
     description = db.Column(db.String(200), nullable=True)
     introduction = db.Column(db.String(200), nullable=True)
     content = db.Column(db.String(200), nullable=True)
@@ -67,10 +63,9 @@ class Clas(db.Model):
     video_link = db.Column(db.String(500), nullable=False)
     limit_time = db.Column(db.Integer, nullable=False)
 
+    company_id = db.Column(db.Integer, db.ForeignKey('company.id'))
     questions = db.relationship('Question', backref='course', lazy='dynamic')
-    # students = db.relationship('User', secondary=user_class_association_table, lazy='subquery', backref=db.backref('courses', lazy=True))
     users = db.relationship('UserClas', back_populates='clas')
 
     def __repr__(self):
         return f"Clas {self.description}"
-

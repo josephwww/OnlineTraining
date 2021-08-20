@@ -7,7 +7,7 @@ from Course.models import User, Clas
 setting the form in the application 
 '''
 class CompanyRegistrationForm(FlaskForm):
-    username = StringField('Company Name', validators=[DataRequired(), Length(min=4, max=20)])
+    username = StringField('Company Name', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
     confirm_password = PasswordField('Confirmed Password', validators=[DataRequired(), EqualTo('password')])
     submit = SubmitField('Add Company')
@@ -34,11 +34,21 @@ class LoginForm(FlaskForm):
     remember = BooleanField('Remember Me')
     submit = SubmitField('Login')
 
+class ClassForm(FlaskForm):
+    category = SelectField('Category', choices=[('Mental', 'Mental'), ('Physical', 'Physical'), ('Verbal', 'Verbal')], validators=[DataRequired()], coerce=str)
+    description = StringField('Description', validators=[DataRequired()])
+    introduction = StringField('Introduction', validators=[DataRequired()])
+    content = StringField('Content', validators=[DataRequired()])
+    outcome = StringField('Outcome', validators=[DataRequired()])
+    lecturer = StringField('Lecturer', validators=[DataRequired()])
+    share = StringField('Share', validators=[DataRequired()])
+    video_link = StringField('Video link', validators=[DataRequired()])
+    submit = SubmitField('Add Course')
 
 class QuestionForm(FlaskForm):
     question_type = SelectField('Question Type', choices=[('YN', 'Yes/No'), ('MC', 'Multiple Choice'), ('ET', 'Essay Type'), ('C', 'Comprehensive')], validators=[])
     question_text = StringField('Question', validators=[DataRequired()])
     year = IntegerField('Year', validators=[])
     semester = SelectField('Semester', choices=[(1, 1), (2,2)], validators=[DataRequired()], coerce=int)
-    course = SelectField('Course', choices=Clas.query.with_entities(Clas.id, Clas.description).all(), validators=[], coerce=int)
+    course = SelectField('Course', choices=[], validators=[], coerce=int)
     submit = SubmitField('Add Question')

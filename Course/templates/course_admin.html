@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+{% block content %}
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th scope="col">Course Description</th>
+      <th scope="col">Limit Time</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for course in tests %}
+      <tr>
+          <th scope="row">{{ course.description }}</th>
+          <td >
+          <div class="btn-group dropright">
+            <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                {{ course.limit_time }} Mins
+            </button>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" href="{{ url_for('change_time', clas_id=course.id, minutes=30) }}">30 Mins</a>
+              <a class="dropdown-item" href="{{ url_for('change_time', clas_id=course.id, minutes=60) }}">60 Mins</a>
+              <a class="dropdown-item" href="{{ url_for('change_time', clas_id=course.id, minutes=90) }}">90 Mins</a>
+              <a class="dropdown-item" href="{{ url_for('change_time', clas_id=course.id, minutes=120) }}">120 Mins</a>
+          </div>
+          </div>
+              </td>
+      </tr>
+  {% endfor %}
+
+  </tbody>
+</table>
+{% endblock content %}
